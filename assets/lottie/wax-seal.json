@@ -1,0 +1,17 @@
+lottie.loadAnimation({
+
+container:
+document.getElementById(
+"waxAnimation"
+),
+
+renderer:"svg",
+
+loop:false,
+
+autoplay:true,
+
+path:
+"assets/lottie/wax-seal.json"
+
+});
