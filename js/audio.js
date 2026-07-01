@@ -1,62 +1,71 @@
-/* ========================================= */
-/* AUDIO MANAGER */
-/* ========================================= */
+/* ================================================= */
+/* EXPERIENCE AUDIO */
+/* ================================================= */
 
-const windAudio =
-document.getElementById(
-"windAudio"
-);
+window.startExperienceAudio = function(){
 
-const musicAudio =
-document.getElementById(
-"musicAudio"
-);
+  const windAudio =
+    document.getElementById("windAudio");
 
-windAudio.volume = .25;
-musicAudio.volume = 0;
+  const musicAudio =
+    document.getElementById("musicAudio");
 
-/* ========================================= */
-/* START AUDIO */
-/* ========================================= */
+  if(windAudio){
 
-function startExperienceAudio(){
+    windAudio.volume = 0;
 
-windAudio.play().catch(()=>{});
+    windAudio.play().catch(() => {});
 
-musicAudio.play().catch(()=>{});
+    fadeAudio(
+      windAudio,
+      0,
+      0.12,
+      2600
+    );
 
-let volume = 0;
+  }
 
-const fade = setInterval(()=>{
+  if(musicAudio){
 
-volume += .01;
+    musicAudio.volume = 0;
 
-musicAudio.volume = volume;
+    musicAudio.play().catch(() => {});
 
-if(volume >= .4){
+    fadeAudio(
+      musicAudio,
+      0,
+      0.28,
+      4200
+    );
 
-clearInterval(fade);
+  }
+
+};
+
+function fadeAudio(audio, from, to, duration){
+
+  const startTime =
+    performance.now();
+
+  audio.volume = from;
+
+  function updateVolume(currentTime){
+
+    const progress =
+      Math.min((currentTime - startTime) / duration, 1);
+
+    const easedProgress =
+      1 - Math.pow(1 - progress, 3);
+
+    audio.volume =
+      from + (to - from) * easedProgress;
+
+    if(progress < 1){
+      requestAnimationFrame(updateVolume);
+    }
+
+  }
+
+  requestAnimationFrame(updateVolume);
 
 }
-
-},100);
-
-}
-
-/* ========================================= */
-/* PORTONE CLICK */
-/* ========================================= */
-
-document
-.getElementById("openInvitation")
-.addEventListener(
-
-"click",
-
-()=>{
-
-startExperienceAudio();
-
-}
-
-);
